@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Klinik - Siap Pakai</title>
+    <title>CHAT BOTSAR-SARTIKA</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -271,7 +271,7 @@
         <!-- Messages -->
         <div class="chatbot-messages" id="chatMessages">
             <div class="welcome-message">
-                👋 Halo! Saya asisten klinik. 
+                👋 Halo! Saya asisten chat bot klinik sartika. 
                 <br>Saya bisa bantu daftar dokter atau info jadwal.
             </div>
             <div class="quick-buttons" id="quickButtons">
@@ -303,15 +303,15 @@
     <script>
         // Data Dokter
         const doctors = {
-            kandungan: {
-                name: "Dr. Andi Pratama, Sp.OG",
-                schedule: "Senin 08:00-14:00, Rabu 16:00-20:00, Jumat 08:00-14:00",
-                wa: "https://wa.me/6281234567890"
+            syaraf: {
+                name: "Dr. Irawan Sandjojo,Sp.N",
+                schedule: "Senin-Sabtu 08:00-SELESAI, Senin-Jumat 18:30-SELESAI" ,
+                wa: "https://wa.me/6285730591047"
             },
             dalam: {
-                name: "Dr. Sari Wijaya, Sp.PD",
-                schedule: "Selasa 09:00-15:00, Kamis 16:00-20:00, Sabtu 08:00-13:00",
-                wa: "https://wa.me/6281234567891"
+                name: "Dr. Gendut Wisito, Sp.PD",
+                schedule: "Senin-Kamis 09:00-selesai, 18:00-selesai",
+                wa: "https://wa.me/6285730591047"
             },
             ortopedi: {
                 name: "Dr. Budi Santoso, Sp.OT",
@@ -331,7 +331,7 @@
             'hai': ['Hai! 😊 Ada yang bisa saya bantu?'],
             'jadwal': [`📅 **Jadwal Dokter Hari Ini:**
 
-- Dr. Andi (Kandungan): Senin 08:00-14:00
+- Dr. Andi (syaraf): Senin 08:00-14:00
 - Dr. Sari (Dalam): Selasa 09:00-15:00  
 - Dr. Budi (Ortopedi): Selasa 14:00-18:00
 - Dr. Lina (Kulit): Senin 16:00-19:00
@@ -347,10 +347,8 @@ Siap daftar sekarang? Pilih dokter:`,
             Object.keys(doctors).map(key => `<button class="quick-btn" onclick="bookDoctor('${key}')">${doctors[key].name.split(',')[0]}</button>`).join('')],
             'spesialis': [`🏥 **Spesialis Tersedia:**
 
-- **Kandungan** - Dr. Andi Pratama
-- **Penyakit Dalam** - Dr. Sari Wijaya  
-- **Ortopedi** - Dr. Budi Santoso
-- **Kulit & Kelamin** - Dr. Lina Maharani
+- **syaraf** - Dr. Irawan Sandjojo,Sp.N
+- **Penyakit Dalam** - Dr. Gendut Wisito,Sp.PD  
 
 Keluhan apa? Saya sarankan dokternya!`],
             'info': [`🏥 **Info Klinik Sehat Jaya**
