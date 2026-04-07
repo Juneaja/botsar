@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Klinik - Siap Pakai</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Chatbot Container */
+        .chatbot-container {
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Header */
+        .chatbot-header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .chatbot-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .chatbot-status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Messages Area */
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            background: #f8f9fa;
+            position: relative;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .message.bot .message-content {
+            background: white;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #25D366, #20c95b);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        /* Quick Buttons */
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quick-btn {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #1976d2;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(25, 118, 210, 0.2);
+        }
+
+        .quick-btn:hover {
+            background: linear-gradient(135deg, #1976d2, #1565c0);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(25, 118, 210, 0.4);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 20px;
+            border-bottom-left-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: #25D366;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* Input Area */
+        .chatbot-input {
+            padding: 25px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            padding: 15px 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .chatbot-input input:focus {
+            border-color: #25D366;
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+        }
+
+        .chatbot-send {
+            background: linear-gradient(135deg, #25D366, #20c95b);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        .chatbot-send:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+        }
+
+        .chatbot-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .chatbot-container {
+                width: calc(100vw - 40px);
+                height: calc(100vh - 40px);
+                border-radius: 20px;
+            }
+        }
+
+        /* Scrollbar */
+        .chatbot-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #25D366, #20c95b);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <!-- Header -->
+        <div class="chatbot-header">
+            <div class="chatbot-avatar">
+                <i class="fas fa-robot"></i>
+            </div>
+            <h3>Asisten Klinik</h3>
+            <div class="chatbot-status">Online <i class="fas fa-circle" style="font-size: 0.6rem; opacity: 0.8;"></i></div>
+        </div>
+
+        <!-- Messages -->
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="welcome-message">
+                👋 Halo! Saya asisten klinik. 
+                <br>Saya bisa bantu daftar dokter atau info jadwal.
+            </div>
+            <div class="quick-buttons" id="quickButtons">
+                <button class="quick-btn" onclick="sendQuickMessage('jadwal')">📅 Cek Jadwal</button>
+                <button class="quick-btn" onclick="sendQuickMessage('daftar')">📱 Daftar Dokter</button>
+                <button class="quick-btn" onclick="sendQuickMessage('spesialis')">🏥 Spesialis</button>
+                <button class="quick-btn" onclick="sendQuickMessage('info')">ℹ️ Info Klinik</button>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Input -->
+        <div class="chatbot-input">
+            <input type="text" id="messageInput" placeholder="Ketik pesan... (Enter untuk kirim)" autocomplete="off">
+            <button class="chatbot-send" id="sendButton" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Data Dokter
+        const doctors = {
+            kandungan: {
+                name: "Dr. Andi Pratama, Sp.OG",
+                schedule: "Senin 08:00-14:00, Rabu 16:00-20:00, Jumat 08:00-14:00",
+                wa: "https://wa.me/6281234567890"
+            },
+            dalam: {
+                name: "Dr. Sari Wijaya, Sp.PD",
+                schedule: "Selasa 09:00-15:00, Kamis 16:00-20:00, Sabtu 08:00-13:00",
+                wa: "https://wa.me/6281234567891"
+            },
+            ortopedi: {
+                name: "Dr. Budi Santoso, Sp.OT",
+                schedule: "Selasa 14:00-18:00, Kamis 09:00-13:00, Sabtu 14:00-18:00",
+                wa: "https://wa.me/6281234567892"
+            },
+            kulit: {
+                name: "Dr. Lina Maharani, Sp.KK",
+                schedule: "Senin 16:00-19:00, Rabu 09:00-12:00, Jumat 16:00-19:00",
+                wa: "https://wa.me/6281234567893"
+            }
+        };
+
+        // Responses AI
+        const responses = {
+            'halo': ['Halo! 👋 Saya asisten klinik. Mau daftar dokter atau cek jadwal?'],
+            'hai': ['Hai! 😊 Ada yang bisa saya bantu?'],
+            'jadwal': [`📅 **Jadwal Dokter Hari Ini:**
+
+- Dr. Andi (Kandungan): Senin 08:00-14:00
+- Dr. Sari (Dalam): Selasa 09:00-15:00  
+- Dr. Budi (Ortopedi): Selasa 14:00-18:00
+- Dr. Lina (Kulit): Senin 16:00-19:00
+
+Mau daftar yang mana?`],
+            'daftar': [`🎉 **Cara Daftar Mudah:**
+
+1. Pilih dokter
+2. Klik tombol WhatsApp
+3. Chat admin untuk konfirmasi
+
+Siap daftar sekarang? Pilih dokter:`, 
+            Object.keys(doctors).map(key => `<button class="quick-btn" onclick="bookDoctor('${key}')">${doctors[key].name.split(',')[0]}</button>`).join('')],
+            'spesialis': [`🏥 **Spesialis Tersedia:**
+
+- **Kandungan** - Dr. Andi Pratama
+- **Penyakit Dalam** - Dr. Sari Wijaya  
+- **Ortopedi** - Dr. Budi Santoso
+- **Kulit & Kelamin** - Dr. Lina Maharani
+
+Keluhan apa? Saya sarankan dokternya!`],
+            'info': [`🏥 **Info Klinik Sehat Jaya**
+
+📍 Alamat: Jl. Health No.123, Jakarta
+🕒 Buka: 08:00 - 20:00
+📞 WA Admin: 0812-3456-7890
+💳 BPJS: Tersedia
+
+Ada pertanyaan lain?`],
+            'default': ['Maaf, saya belum paham. 😅 Coba tanya: "jadwal", "daftar", atau "spesialis"', 
+            '<div class="quick-buttons"><button class="quick-btn" onclick="sendQuickMessage(\'jadwal\')">📅 Jadwal</button><button class="quick-btn" onclick="sendQuickMessage(\'daftar\')">📱 Daftar</button></div>']
+        };
+
+        let isTyping = false;
+
+        // Elements
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const quickButtons = document.getElementById('quickButtons');
+
+        // Event Listeners
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        messageInput.addEventListener('input', function() {
+            sendButton.disabled = this.value.trim() === '';
+        });
+
+        // Functions
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            messageDiv.innerHTML = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            quickButtons.style.display = 'none';
+        }
+
+        function showTyping(show = true) {
+            typingIndicator.style.display = show ? 'block' : 'none';
+            if (show) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        function getBotResponse(text) {
+            text = text.toLowerCase();
+            
+            for (let key in responses) {
+                if (text.includes(key)) {
+                    return responses[key];
+                }
+            }
+            return responses['default'];
+        }
+
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text || isTyping) return;
+
+            // User message
+            addMessage(text, true);
+            messageInput.value = '';
+
+            // Show typing
+            showTyping(true);
+            sendButton.disabled = true;
+
+            // Simulate typing delay
+            setTimeout(() => {
+                showTyping(false);
+                const response = getBotResponse(text);
+                if (Array.isArray(response)) {
+                    response.forEach(msg => {
+                        setTimeout(() => addMessage(msg), 300);
+                    });
+                } else {
+                    addMessage(response);
+                }
+                sendButton.disabled = false;
+            }, 1000 + Math.random() * 1500);
+        }
+
+        function sendQuickMessage(text) {
+            addMessage(text, true);
+            setTimeout(() => {
+                const response = getBotResponse(text);
+                if (Array.isArray(response)) {
+                    response.forEach((msg, index) => {
+                        setTimeout(() => addMessage(msg), index * 500);
+                    });
+                } else {
+                    addMessage(response);
+                }
+            }, 500);
+        }
+
+        function bookDoctor(specialty) {
+            const doctor = doctors[specialty];
+            const message = `Halo Admin! Saya ingin daftar dengan ${doctor.name}\nJadwal: ${doctor.schedule}`;
+            const waUrl = `${doctor.wa}?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+            addMessage(`✅ Berhasil! Membuka WhatsApp untuk ${doctor.name}`);
+        }
+
+        // Initialize
+        messageInput.focus();
+    </script>
+</body>
+</html>
